@@ -55,4 +55,11 @@ public class SaxRssParser {
         return titles;
     }
     
+    /**
+     * Method to allow people to use custom handlers
+     */
+    public void setRssHadler(RssHandler h){
+        handler = h;
+    }
+    
 }

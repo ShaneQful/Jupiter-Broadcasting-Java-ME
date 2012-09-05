@@ -1,12 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package jupiter.broadcasting.parser;
 
 import java.util.Hashtable;
 import java.util.Vector;
-import javax.microedition.lcdui.List;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 /**
@@ -16,17 +11,51 @@ import org.xml.sax.helpers.DefaultHandler;
 public class RssHandler extends DefaultHandler{
     private Vector rssTitles;
     private Vector rssLinks;
+    private String linkString;
+    private String titleString;
+    private int counter = 0;
+    private int maxRecords = 15;
     private boolean isLink = false;
     private boolean isTitle = false;
+    private boolean ifInsideItem = false;
     
+    /**
+     * Constructor
+     */
     public RssHandler() {
+        linkString = "link";
+        titleString = "title";
         rssTitles = new Vector();
         rssLinks = new Vector();
     }
+    
+    /**
+     * Constructer that allows a little more control over parsing the feed
+     * @param title
+     * @param link
+     * @param numberOfRecords The max number of item to be parsed.
+     */
+    public RssHandler(String title,String link,int numberOfRecords) {
+        titleString = title;
+        linkString = link;
+        rssTitles = new Vector();
+        rssLinks = new Vector();
+        maxRecords = numberOfRecords;
+    }
            
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        isLink = qName.equalsIgnoreCase("link");
-        isTitle = qName.equalsIgnoreCase("title");
+    		if(ifInsideItem){
+            isLink = qName.equalsIgnoreCase(linkString);
+            isTitle = qName.equalsIgnoreCase(titleString);
+        }else{
+            ifInsideItem = qName.equalsIgnoreCase("item");
+        }
+        if(isTitle){
+            if(counter > maxRecords){
+                throw new SAXException("Parsing limit of "+maxRecords+" items reached");
+            }
+            counter++;
+        }
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
