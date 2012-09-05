@@ -13,3 +13,11 @@ Upcoming features:
 * Live Stream 
 
 * MP3/Ogg Feed
+
+Notes on anyone wanting to contribute:
+
+* Using 4 tabs instead of \t character as is netbeans default
+
+* Use standard java style guide
+
+* If you have a patch and it makes sense. I'll take it but please justify your patches.
