@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.io.Connector;
+import javax.microedition.io.InputConnection;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
@@ -28,7 +29,6 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
     private boolean midletPaused = false;
     Player player;
     Hashtable youtubeRSS;
-    PlayerRunnable playerRunnable;
 //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
     private Command exitCommand1;
     private Command exitCommand2;
@@ -44,8 +44,7 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
      * The JupiterMIDlet constructor.
      */
     public JupiterMIDlet() {
-        playerRunnable = new PlayerRunnable();
-        new Thread(playerRunnable).start();
+        
     }
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
@@ -126,7 +125,7 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
                 // write post-action user code here
             } else if (command == exitCommand1) {//GEN-LINE:|7-commandAction|3|48-preAction
                 // write pre-action user code here
-                DieProperly();//GEN-LINE:|7-commandAction|4|48-postAction
+                exitMIDlet();//GEN-LINE:|7-commandAction|4|48-postAction
                 // write post-action user code here
             }//GEN-BEGIN:|7-commandAction|5|56-preAction
         } else if (displayable == showList) {
@@ -140,7 +139,7 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
                 // write post-action user code here
             } else if (command == exitCommand2) {//GEN-LINE:|7-commandAction|9|60-preAction
                 // write pre-action user code here
-                DieProperly();//GEN-LINE:|7-commandAction|10|60-postAction
+                exitMIDlet();//GEN-LINE:|7-commandAction|10|60-postAction
                 // write post-action user code here
             }//GEN-BEGIN:|7-commandAction|11|24-preAction
         } else if (displayable == splashScreen) {
@@ -231,20 +230,18 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
                 // write pre-action user code here
 //GEN-LINE:|38-action|2|42-postAction
                 // write post-action user code here
-                if(playerRunnable.isReady()){
-                    player = playerRunnable.getPlayer();
-                    try{
-                        if(player.getState() != Player.STARTED){
-                            player.start();
-                        }else{
-                            player.stop();
-                        }
-                    }catch(MediaException e){
-                        System.out.println(e.getMessage());
+                try{
+                    String url = "http://jbradio.out.airtime.pro:8000/jbradio_b";
+                    if(player == null){
+                        player = Manager.createPlayer(url);
+                        player.start();
+                    }else{
+                        player.stop();
                     }
-                }else{
-                    //Error Handling 
+                }catch(Exception e){
+                    e.printStackTrace();
                 }
+                
             } else if (__selectedString.equals("Shows")) {//GEN-LINE:|38-action|3|43-preAction
                 // write pre-action user code here
                 switchDisplayable(null, getShowList());//GEN-LINE:|38-action|4|43-postAction
@@ -355,17 +352,7 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
     }
 //</editor-fold>//GEN-END:|64-getter|2|
 
-//<editor-fold defaultstate="collapsed" desc=" Generated Method: DieProperly ">//GEN-BEGIN:|76-entry|0|77-preAction
-    /**
-     * Performs an action assigned to the DieProperly entry-point.
-     */
-    public void DieProperly() {//GEN-END:|76-entry|0|77-preAction
-        // write pre-action user code here
-//GEN-LINE:|76-entry|1|77-postAction
-        // write post-action user code here
-        System.exit(0);
-    }//GEN-BEGIN:|76-entry|2|
-//</editor-fold>//GEN-END:|76-entry|2|
+
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Getter: stopCommand ">//GEN-BEGIN:|70-getter|0|70-preInit
     /**
@@ -401,7 +388,6 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
         switchDisplayable(null, null);
         destroyApp(true);
         notifyDestroyed();
-        System.exit(0);
     }
 
     /**

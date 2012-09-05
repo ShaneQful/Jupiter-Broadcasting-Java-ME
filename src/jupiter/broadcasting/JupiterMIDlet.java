@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.io.Connector;
+import javax.microedition.io.InputConnection;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
@@ -28,12 +29,11 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
     private boolean midletPaused = false;
     Player player;
     Hashtable youtubeRSS;
-    PlayerRunnable playerRunnable;
 //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
+    private Command stopCommand;
+    private Command backCommand;
     private Command exitCommand1;
     private Command exitCommand2;
-    private Command backCommand;
-    private Command stopCommand;
     private SplashScreen splashScreen;
     private List list;
     private List showList;
@@ -44,8 +44,7 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
      * The JupiterMIDlet constructor.
      */
     public JupiterMIDlet() {
-        playerRunnable = new PlayerRunnable();
-        new Thread(playerRunnable).start();
+        
     }
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
@@ -206,12 +205,11 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
         if (list == null) {//GEN-END:|38-getter|0|38-preInit
             // write pre-init user code here
             list = new List("Jupiter Broadcasting", Choice.IMPLICIT);//GEN-BEGIN:|38-getter|1|38-postInit
-            list.append("Play Live Stream", null);
             list.append("Shows", null);
             list.append("Donate", null);
             list.addCommand(getExitCommand1());
             list.setCommandListener(this);
-            list.setSelectedFlags(new boolean[]{false, false, false});//GEN-END:|38-getter|1|38-postInit
+            list.setSelectedFlags(new boolean[]{false, false});//GEN-END:|38-getter|1|38-postInit
             // write post-init user code here
         }//GEN-BEGIN:|38-getter|2|
         return list;
@@ -225,44 +223,27 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
      */
     public void listAction() {//GEN-END:|38-action|0|38-preAction
         // enter pre-action user code here
-        String __selectedString = getList().getString(getList().getSelectedIndex());//GEN-BEGIN:|38-action|1|42-preAction
+        String __selectedString = getList().getString(getList().getSelectedIndex());//GEN-BEGIN:|38-action|1|43-preAction
         if (__selectedString != null) {
-            if (__selectedString.equals("Play Live Stream")) {//GEN-END:|38-action|1|42-preAction
+            if (__selectedString.equals("Shows")) {//GEN-END:|38-action|1|43-preAction
                 // write pre-action user code here
-//GEN-LINE:|38-action|2|42-postAction
+                switchDisplayable(null, getShowList());//GEN-LINE:|38-action|2|43-postAction
                 // write post-action user code here
-                if(playerRunnable.isReady()){
-                    player = playerRunnable.getPlayer();
-                    try{
-                        if(player.getState() != Player.STARTED){
-                            player.start();
-                        }else{
-                            player.stop();
-                        }
-                    }catch(MediaException e){
-                        System.out.println(e.getMessage());
-                    }
-                }else{
-                    //Error Handling 
-                }
-            } else if (__selectedString.equals("Shows")) {//GEN-LINE:|38-action|3|43-preAction
+            } else if (__selectedString.equals("Donate")) {//GEN-LINE:|38-action|3|45-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getShowList());//GEN-LINE:|38-action|4|43-postAction
-                // write post-action user code here
-            } else if (__selectedString.equals("Donate")) {//GEN-LINE:|38-action|5|45-preAction
-                // write pre-action user code here
-//GEN-LINE:|38-action|6|45-postAction
+//GEN-LINE:|38-action|4|45-postAction
                 try {    
                     this.platformRequest("http://www.jupiterbroadcasting.com/support-us/");
                 // write post-action user code here
                 }catch(ConnectionNotFoundException e){
                     System.out.println(e.getMessage());
                 }
-            }//GEN-BEGIN:|38-action|7|38-postAction
-        }//GEN-END:|38-action|7|38-postAction
+            }//GEN-BEGIN:|38-action|5|38-postAction
+        }//GEN-END:|38-action|5|38-postAction
         // enter post-action user code here
-    }//GEN-BEGIN:|38-action|8|
-//</editor-fold>//GEN-END:|38-action|8|
+    }//GEN-BEGIN:|38-action|6|45-postAction
+//</editor-fold>//GEN-END:|38-action|6|45-postAction
+
 
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand1 ">//GEN-BEGIN:|47-getter|0|47-preInit
