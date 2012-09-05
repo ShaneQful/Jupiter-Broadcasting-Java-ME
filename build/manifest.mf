@@ -1,4 +1,4 @@
-MIDlet-1: Jupiter Broadcasting,/jupiter_broadcasting.png,jupiter.broadcasting.JupiterMIDlet
+MIDlet-1: Jupiter Broadcasting,/icon.png,jupiter.broadcasting.JupiterMIDlet
 MIDlet-Vendor: Vendor
 MIDlet-Name: JupiterBroadcasting
 MIDlet-Version: 1.0

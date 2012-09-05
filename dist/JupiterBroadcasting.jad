@@ -1,5 +1,5 @@
-MIDlet-1: Jupiter Broadcasting,/jupiter_broadcasting.png,jupiter.broadcasting.JupiterMIDlet
-MIDlet-Jar-Size: 97269
+MIDlet-1: Jupiter Broadcasting,/icon.png,jupiter.broadcasting.JupiterMIDlet
+MIDlet-Jar-Size: 102559
 MIDlet-Jar-URL: JupiterBroadcasting.jar
 MIDlet-Name: JupiterBroadcasting
 MIDlet-Vendor: Vendor
