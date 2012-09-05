@@ -79,7 +79,7 @@
                     <Property name="commands" typeID="1C#CommandEventSource" value="A2:3_R403_R48"/>
                     <Property name="title" typeID="Pjava.lang.String" value="VJupiter Broadcasting"/>
                     <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
-                    <Property name="elements" typeID="1C#ListElementEventSource" value="A2:3_R433_R45"/>
+                    <Property name="elements" typeID="1C#ListElementEventSource" value="A3:3_R423_R433_R45"/>
                     <Property name="selectCommand" typeID="C#CommandEventSource" value="R40"/>
                     <Component componentID="43" typeID="C#ListElementEventSource">
                         <Property name="eventHandler" typeID="C#EventHandler" value="R63"/>
@@ -108,6 +108,9 @@
                             <Property name="eventSource" typeID="C#EventSource" value="R48"/>
                             <Property name="mobileDevice" typeID="C#MobileDevice" value="R2"/>
                         </Component>
+                    </Component>
+                    <Component componentID="42" typeID="C#ListElementEventSource">
+                        <Property name="string" typeID="Pjava.lang.String" value="VPlay Live Stream"/>
                     </Component>
                 </Component>
                 <Component componentID="55" typeID="Cjavax.microedition.lcdui.List">

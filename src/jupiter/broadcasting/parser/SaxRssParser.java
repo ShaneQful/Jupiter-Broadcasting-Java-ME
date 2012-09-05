@@ -3,6 +3,7 @@ package jupiter.broadcasting.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
+import java.util.Vector;
 import javax.microedition.lcdui.List;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
@@ -16,9 +17,11 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author shane
  */
 public class SaxRssParser {
-    private  SAXParserFactory factory;
+    private SAXParserFactory factory;
     private SAXParser saxParser;
     private RssHandler handler;
+    private Vector titles;
+    
     public SaxRssParser() {
         try {
             factory = SAXParserFactory.newInstance();
@@ -32,7 +35,6 @@ public class SaxRssParser {
     }
     
     public Hashtable parse(String rssfeed){
-        
         StreamConnection networkStream;
         InputStream inputStream;
         try {
@@ -45,7 +47,12 @@ public class SaxRssParser {
         } catch (SAXException ex){
             ex.printStackTrace();
         }
+        titles = handler.getTitles();
         return handler.getTable();
+    }
+    
+    public Vector getTitles(){
+        return titles;
     }
     
 }

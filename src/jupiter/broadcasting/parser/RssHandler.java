@@ -18,13 +18,12 @@ public class RssHandler extends DefaultHandler{
     private Vector rssLinks;
     private boolean isLink = false;
     private boolean isTitle = false;
+    
     public RssHandler() {
         rssTitles = new Vector();
         rssLinks = new Vector();
     }
-    
-    
-    
+           
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         isLink = qName.equalsIgnoreCase("link");
         isTitle = qName.equalsIgnoreCase("title");
@@ -50,5 +49,9 @@ public class RssHandler extends DefaultHandler{
             output.put(rssTitles.elementAt(i), rssLinks.elementAt(i));
         }
         return output;
+    }
+    
+    public Vector getTitles(){
+        return rssTitles;
     }
 }
