@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.microedition.io.ConnectionNotFoundException;
+import javax.microedition.io.Connector;
+import javax.microedition.io.StreamConnection;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import javax.microedition.media.Manager;
@@ -26,10 +28,12 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
     private boolean midletPaused = false;
     Player player;
     Hashtable youtubeRSS;
+    PlayerRunnable playerRunnable;
 //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
-    private Command exitCommand;
     private Command exitCommand1;
     private Command exitCommand2;
+    private Command backCommand;
+    private Command stopCommand;
     private SplashScreen splashScreen;
     private List list;
     private List showList;
@@ -40,15 +44,8 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
      * The JupiterMIDlet constructor.
      */
     public JupiterMIDlet() {
-        try {
-            player = Manager.createPlayer("http://jbradio.out.airtime.pro:8000/jbradio_b");
-            player.realize();
-            player.prefetch();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (MediaException e) {
-            e.printStackTrace();
-        }
+        playerRunnable = new PlayerRunnable();
+        new Thread(playerRunnable).start();
     }
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
@@ -137,37 +134,28 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
                 // write pre-action user code here
                 showListAction();//GEN-LINE:|7-commandAction|6|56-postAction
                 // write post-action user code here
-            } else if (command == exitCommand2) {//GEN-LINE:|7-commandAction|7|60-preAction
+            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|7|65-preAction
                 // write pre-action user code here
-                exitMIDlet();//GEN-LINE:|7-commandAction|8|60-postAction
+                switchDisplayable(null, getList());//GEN-LINE:|7-commandAction|8|65-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|9|24-preAction
+            } else if (command == exitCommand2) {//GEN-LINE:|7-commandAction|9|60-preAction
+                // write pre-action user code here
+                exitMIDlet();//GEN-LINE:|7-commandAction|10|60-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|11|24-preAction
         } else if (displayable == splashScreen) {
-            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|9|24-preAction
+            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|11|24-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getList());//GEN-LINE:|7-commandAction|10|24-postAction
+                switchDisplayable(null, getList());//GEN-LINE:|7-commandAction|12|24-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|11|7-postCommandAction
-        }//GEN-END:|7-commandAction|11|7-postCommandAction
+            }//GEN-BEGIN:|7-commandAction|13|7-postCommandAction
+        }//GEN-END:|7-commandAction|13|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|12|
-//</editor-fold>//GEN-END:|7-commandAction|12|
+    }//GEN-BEGIN:|7-commandAction|14|
+//</editor-fold>//GEN-END:|7-commandAction|14|
 
-//<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|18-getter|0|18-preInit
-    /**
-     * Returns an initialized instance of exitCommand component.
-     *
-     * @return the initialized component instance
-     */
-    public Command getExitCommand() {
-        if (exitCommand == null) {//GEN-END:|18-getter|0|18-preInit
-            // write pre-init user code here
-            exitCommand = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|18-getter|1|18-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|18-getter|2|
-        return exitCommand;
-    }
-//</editor-fold>//GEN-END:|18-getter|2|
+
+
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Getter: splashScreen ">//GEN-BEGIN:|22-getter|0|22-preInit
     /**
@@ -243,14 +231,19 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
                 // write pre-action user code here
 //GEN-LINE:|38-action|2|42-postAction
                 // write post-action user code here
-                try{
-                    if(player.getState() != Player.STARTED){
-                        player.start();
-                    }else{
-                        player.stop();
+                if(playerRunnable.isReady()){
+                    player = playerRunnable.getPlayer();
+                    try{
+                        if(player.getState() != Player.STARTED){
+                            player.start();
+                        }else{
+                            player.stop();
+                        }
+                    }catch(MediaException e){
+                        System.out.println(e.getMessage());
                     }
-                }catch(MediaException e){
-                    System.out.println(e.getMessage());
+                }else{
+                    //Error Handling 
                 }
             } else if (__selectedString.equals("Shows")) {//GEN-LINE:|38-action|3|43-preAction
                 // write pre-action user code here
@@ -315,6 +308,7 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
             // write pre-init user code here
             showList = new List("Shows", Choice.IMPLICIT);//GEN-BEGIN:|55-getter|1|55-postInit
             showList.addCommand(getExitCommand2());
+            showList.addCommand(getBackCommand());
             showList.setCommandListener(this);
             showList.setSelectedFlags(new boolean[]{});//GEN-END:|55-getter|1|55-postInit
             SaxRssParser parser = new SaxRssParser();
@@ -344,6 +338,42 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
         }
     }//GEN-BEGIN:|55-action|2|
 //</editor-fold>//GEN-END:|55-action|2|
+
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: backCommand ">//GEN-BEGIN:|64-getter|0|64-preInit
+    /**
+     * Returns an initialized instance of backCommand component.
+     *
+     * @return the initialized component instance
+     */
+    public Command getBackCommand() {
+        if (backCommand == null) {//GEN-END:|64-getter|0|64-preInit
+            // write pre-init user code here
+            backCommand = new Command("Back", Command.BACK, 0);//GEN-LINE:|64-getter|1|64-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|64-getter|2|
+        return backCommand;
+    }
+//</editor-fold>//GEN-END:|64-getter|2|
+
+
+
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: stopCommand ">//GEN-BEGIN:|70-getter|0|70-preInit
+    /**
+     * Returns an initialized instance of stopCommand component.
+     *
+     * @return the initialized component instance
+     */
+    public Command getStopCommand() {
+        if (stopCommand == null) {//GEN-END:|70-getter|0|70-preInit
+            // write pre-init user code here
+            stopCommand = new Command("Stop", Command.STOP, 0);//GEN-LINE:|70-getter|1|70-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|70-getter|2|
+        return stopCommand;
+    }
+//</editor-fold>//GEN-END:|70-getter|2|
+
+
 
     /**
      * Returns a display instance.

@@ -1,8 +1,8 @@
 MIDlet-1: Jupiter Broadcasting,/icon.png,jupiter.broadcasting.JupiterMIDlet
-MIDlet-Jar-Size: 103053
+MIDlet-Jar-Size: 104204
 MIDlet-Jar-URL: JupiterBroadcasting.jar
 MIDlet-Name: JupiterBroadcasting
 MIDlet-Vendor: Shane Quigley
-MIDlet-Version: 1.0
+MIDlet-Version: 1.1
 MicroEdition-Configuration: CLDC-1.1
 MicroEdition-Profile: MIDP-2.0
