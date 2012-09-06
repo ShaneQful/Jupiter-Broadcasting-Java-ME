@@ -8,27 +8,28 @@ Also think this is the first JB app for symbian.
 
 To install get both the jad and jar files from the dist folder onto your phone and open the jad file
 
-Fetures:
-==
+### Fetures:
+
 
 * Youtube feed to play videos
 
 * Mp3 Feed to download mp3's
 
-Upcoming features:
-==
+### Upcoming features:
 
-* File Browser for older feeds
+* Categorized Show Feeds
+
+* File Browser for older downloads
 
 * Live Stream (This is starting to seem like its not going to happen)
 
 * Ogg Feed 
 
-Notes on anyone wanting to contribute:
-==
+### Notes on anyone wanting to contribute:
 
-* Using 4 tabs instead of \t character as is netbeans default
 
-* Use standard java style guide
+* Using 4 spaces as tabs instead of \t character because this is the netbeans default.
+
+* (Use standard java style guide)[http://www.oracle.com/technetwork/java/codeconv-138413.html]
 
 * If you have a patch and it makes sense. I'll take it but please justify your patches.
