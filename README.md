@@ -17,9 +17,11 @@ To install get both the jad and jar files from the dist folder onto your phone a
 
 * Mp3 Feed to download mp3's
 
-### Upcoming features:
+	* Categorized Show Feeds for Mp3's
 
-* Categorized Show Feeds
+### Upcoming features/To Do:
+
+* Clean up threading because at this stage deadlock may occur but that's a probelm for the morning ;P
 
 * File Browser for older downloads
 

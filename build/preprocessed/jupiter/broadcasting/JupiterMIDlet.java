@@ -17,6 +17,7 @@ import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
 import javax.microedition.media.PlayerListener;
+import jupiter.broadcasting.parser.ParsingThread;
 import jupiter.broadcasting.parser.RssHandler;
 import jupiter.broadcasting.parser.SaxRssParser;
 import org.netbeans.microedition.lcdui.SplashScreen;
@@ -50,6 +51,9 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
      */
     public JupiterMIDlet() {
         showToFeedTable = new Hashtable();
+        //Second Feed burner call breaks app
+        //Should really be doing the networking in a separate thread 
+        //but this still shouldn't be occuring debug in morning
         showToFeedTable.put("Youtube Feed", "http://www.youtube.com/rss/user/JupiterBroadcasting/videos.rss");
         showToFeedTable.put("All Shows", "http://feeds.feedburner.com/JupiterBroadcasting");
         showToFeedTable.put("Coder Radio", "http://feeds.feedburner.com/coderradiomp3");
@@ -354,18 +358,28 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
             SaxRssParser parser = new SaxRssParser();
             String feedUrl = (String)showToFeedTable.get(FEEDSTATUS);
             if(feedUrl.indexOf("youtube") != -1){
-                parseAndDisplayFeed(parser,feedUrl);
-            }else if(!FEEDSTATUS.equalsIgnoreCase("Coder Radio") && !FEEDSTATUS.equalsIgnoreCase("SciByte")){
+                ParsingThread t = new ParsingThread(this, parser, feedUrl){
+                    public void run(){
+                        ((ParsingThread)Thread.currentThread()).parse();
+                    }
+                };
+                t.start();
+            }else{
                 RssHandler customhandler = new RssHandler("title", "enclosure", 15);
                 parser.setRssHadler(customhandler);
-                parseAndDisplayFeed(parser,feedUrl);
+                ParsingThread t = new ParsingThread(this, parser, feedUrl){
+                    public void run(){
+                        ((ParsingThread)Thread.currentThread()).parse();
+                    }
+                };
+                t.start();
             }
         }//GEN-BEGIN:|55-getter|2|
         return episodeList;
     }
 //</editor-fold>//GEN-END:|55-getter|2|
 
-    private void parseAndDisplayFeed(SaxRssParser parser,String feed){
+    public void parseAndDisplayFeed(SaxRssParser parser,String feed){
         rssTable = parser.parse(feed);
         for(int i =0;i < parser.getTitles().size();i++){
             episodeList.append((String)parser.getTitles().elementAt(i), null);

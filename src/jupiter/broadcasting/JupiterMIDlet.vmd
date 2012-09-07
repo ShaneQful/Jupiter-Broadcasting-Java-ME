@@ -176,8 +176,13 @@
                         </Component>
                     </Component>
                     <Component componentID="121" typeID="C#CommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R122"/>
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R55"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R47"/>
+                        <Component componentID="122" typeID="C#ExitMidletEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R121"/>
+                            <Property name="mobileDevice" typeID="C#MobileDevice" value="R2"/>
+                        </Component>
                     </Component>
                 </Component>
                 <Component componentID="76" typeID="Corg.netbeans.microedition.lcdui.pda.FileBrowser">
