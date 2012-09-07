@@ -30,16 +30,18 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
     private boolean midletPaused = false;
     Player player;
     Hashtable rssTable;
-    String FEEDSTATUS = "Youtube";
+    Hashtable showToFeedTable;
+    String FEEDSTATUS = "Youtube Feed";
 //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
+    private Command exitCommand;
+    private Command exitCommand1;
     private Command stopCommand;
     private Command backCommand;
-    private Command exitCommand1;
-    private Command exitCommand2;
     private SplashScreen splashScreen;
     private List list;
-    private List showList;
+    private List episodeList;
     private FileBrowser fileBrowser;
+    private List showList;
     private Image image1;
 //</editor-fold>//GEN-END:|fields|0|
 
@@ -47,7 +49,18 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
      * The JupiterMIDlet constructor.
      */
     public JupiterMIDlet() {
-        
+        showToFeedTable = new Hashtable();
+        //Second Feed burner call breaks app
+        //Should really be doing the networking in a separate thread 
+        //but this still shouldn't be occuring debug in morning
+        showToFeedTable.put("Youtube Feed", "http://www.youtube.com/rss/user/JupiterBroadcasting/videos.rss");
+        showToFeedTable.put("All Shows", "http://feeds.feedburner.com/JupiterBroadcasting");
+        showToFeedTable.put("Coder Radio", "http://feeds.feedburner.com/coderradiomp3");
+        showToFeedTable.put("Faux Show", "http://www.jupiterbroadcasting.com/feeds/FauxShowMP3.xml");
+        showToFeedTable.put("Linux Action Show", "http://feeds.feedburner.com/TheLinuxActionShow");
+        showToFeedTable.put("SciByte", "http://feeds.feedburner.com/scibyteaudio");
+        showToFeedTable.put("Techsnap", "http://feeds.feedburner.com/techsnapmp3");
+        showToFeedTable.put("Unfilter", "http://www.jupiterbroadcasting.com/feeds/unfilterMP3.xml");
     }
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
@@ -121,60 +134,78 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
      */
     public void commandAction(Command command, Displayable displayable) {//GEN-END:|7-commandAction|0|7-preCommandAction
         // write pre-action user code here
-        if (displayable == fileBrowser) {//GEN-BEGIN:|7-commandAction|1|78-preAction
-            if (command == FileBrowser.SELECT_FILE_COMMAND) {//GEN-END:|7-commandAction|1|78-preAction
+        if (displayable == episodeList) {//GEN-BEGIN:|7-commandAction|1|56-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|1|56-preAction
+                // write pre-action user code here
+                episodeListAction();//GEN-LINE:|7-commandAction|2|56-postAction
+                // write post-action user code here
+            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|3|65-preAction
+                // write pre-action user code here
+                isYoutube();//GEN-LINE:|7-commandAction|4|65-postAction
+                // write post-action user code here
+                episodeList = null;//This isn't effiecient but will do for the moment
+            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|5|121-preAction
+                // write pre-action user code here
+//GEN-LINE:|7-commandAction|6|121-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|7|78-preAction
+        } else if (displayable == fileBrowser) {
+            if (command == FileBrowser.SELECT_FILE_COMMAND) {//GEN-END:|7-commandAction|7|78-preAction
                 // write pre-action user code here
                 try {
-                    this.platformRequest(fileBrowser.getSelectedFileURL());
-                } catch (ConnectionNotFoundException ex) {
-                    ex.printStackTrace();
+                    Player player = Manager.createPlayer(fileBrowser.getSelectedFileURL());
+                    player.start();
+                }catch(IOException ioe) {
+                    ioe.printStackTrace();
+                } 
+                catch(MediaException e) {
+                    e.printStackTrace();
                 }
-//GEN-LINE:|7-commandAction|2|78-postAction
+//GEN-LINE:|7-commandAction|8|78-postAction
                 
-            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|3|81-preAction
+            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|9|81-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getList());//GEN-LINE:|7-commandAction|4|81-postAction
+                switchDisplayable(null, getList());//GEN-LINE:|7-commandAction|10|81-postAction
                 // write post-action user code here
-            } else if (command == exitCommand1) {//GEN-LINE:|7-commandAction|5|82-preAction
+            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|11|82-preAction
                 // write pre-action user code here
-                exitMIDlet();//GEN-LINE:|7-commandAction|6|82-postAction
+                exitMIDlet();//GEN-LINE:|7-commandAction|12|82-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|7|40-preAction
+            }//GEN-BEGIN:|7-commandAction|13|40-preAction
         } else if (displayable == list) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|7|40-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|13|40-preAction
                 // write pre-action user code here
-                listAction();//GEN-LINE:|7-commandAction|8|40-postAction
+                listAction();//GEN-LINE:|7-commandAction|14|40-postAction
                 // write post-action user code here
-            } else if (command == exitCommand1) {//GEN-LINE:|7-commandAction|9|48-preAction
+            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|15|48-preAction
                 // write pre-action user code here
-                exitMIDlet();//GEN-LINE:|7-commandAction|10|48-postAction
+                exitMIDlet();//GEN-LINE:|7-commandAction|16|48-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|11|56-preAction
+            }//GEN-BEGIN:|7-commandAction|17|92-preAction
         } else if (displayable == showList) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|11|56-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|17|92-preAction
                 // write pre-action user code here
-                showListAction();//GEN-LINE:|7-commandAction|12|56-postAction
+                showListAction();//GEN-LINE:|7-commandAction|18|92-postAction
                 // write post-action user code here
-            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|13|65-preAction
+            } else if (command == backCommand) {//GEN-LINE:|7-commandAction|19|108-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getList());//GEN-LINE:|7-commandAction|14|65-postAction
+                switchDisplayable(null, getList());//GEN-LINE:|7-commandAction|20|108-postAction
                 // write post-action user code here
-                showList = null;//This isn't effiecient but will do for the moment
-            } else if (command == exitCommand2) {//GEN-LINE:|7-commandAction|15|60-preAction
+            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|21|111-preAction
                 // write pre-action user code here
-                exitMIDlet();//GEN-LINE:|7-commandAction|16|60-postAction
+                exitMIDlet();//GEN-LINE:|7-commandAction|22|111-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|17|24-preAction
+            }//GEN-BEGIN:|7-commandAction|23|24-preAction
         } else if (displayable == splashScreen) {
-            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|17|24-preAction
+            if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|23|24-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getList());//GEN-LINE:|7-commandAction|18|24-postAction
+                switchDisplayable(null, getList());//GEN-LINE:|7-commandAction|24|24-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|19|7-postCommandAction
-        }//GEN-END:|7-commandAction|19|7-postCommandAction
+            }//GEN-BEGIN:|7-commandAction|25|7-postCommandAction
+        }//GEN-END:|7-commandAction|25|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|20|
-//</editor-fold>//GEN-END:|7-commandAction|20|
+    }//GEN-BEGIN:|7-commandAction|26|
+//</editor-fold>//GEN-END:|7-commandAction|26|
 
 
 
@@ -231,7 +262,7 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
             list.append("Youtube Feed", null);
             list.append("Mp3 Feed", null);
             list.append("Donate", null);
-            list.addCommand(getExitCommand1());
+            list.addCommand(getExitCommand());
             list.setCommandListener(this);
             list.setSelectedFlags(new boolean[]{false, false, false});//GEN-END:|38-getter|1|38-postInit
             // write post-init user code here
@@ -251,12 +282,11 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
         if (__selectedString != null) {
             if (__selectedString.equals("Youtube Feed")) {//GEN-END:|38-action|1|43-preAction
                 // write pre-action user code here
-                FEEDSTATUS = "Youtube";
-                switchDisplayable(null, getShowList());//GEN-LINE:|38-action|2|43-postAction
+                FEEDSTATUS = __selectedString;
+                switchDisplayable(null, getEpisodeList());//GEN-LINE:|38-action|2|43-postAction
                 // write post-action user code here
             } else if (__selectedString.equals("Mp3 Feed")) {//GEN-LINE:|38-action|3|71-preAction
                 // write pre-action user code here
-                FEEDSTATUS = "MP3";
                 switchDisplayable(null, getShowList());//GEN-LINE:|38-action|4|71-postAction
                 // write post-action user code here
             } else if (__selectedString.equals("Donate")) {//GEN-LINE:|38-action|5|45-preAction
@@ -271,86 +301,88 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
             }//GEN-BEGIN:|38-action|7|38-postAction
         }//GEN-END:|38-action|7|38-postAction
         // enter post-action user code here
-    }//GEN-BEGIN:|38-action|8|45-postAction
-//</editor-fold>//GEN-END:|38-action|8|45-postAction
+    }//GEN-BEGIN:|38-action|8|
+//</editor-fold>//GEN-END:|38-action|8|
 
 
 
 
-//<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand1 ">//GEN-BEGIN:|47-getter|0|47-preInit
+
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|47-getter|0|47-preInit
+    /**
+     * Returns an initialized instance of exitCommand component.
+     *
+     * @return the initialized component instance
+     */
+    public Command getExitCommand() {
+        if (exitCommand == null) {//GEN-END:|47-getter|0|47-preInit
+            // write pre-init user code here
+            exitCommand = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|47-getter|1|47-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|47-getter|2|
+        return exitCommand;
+    }
+//</editor-fold>//GEN-END:|47-getter|2|
+
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand1 ">//GEN-BEGIN:|59-getter|0|59-preInit
     /**
      * Returns an initialized instance of exitCommand1 component.
      *
      * @return the initialized component instance
      */
     public Command getExitCommand1() {
-        if (exitCommand1 == null) {//GEN-END:|47-getter|0|47-preInit
+        if (exitCommand1 == null) {//GEN-END:|59-getter|0|59-preInit
             // write pre-init user code here
-            exitCommand1 = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|47-getter|1|47-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|47-getter|2|
-        return exitCommand1;
-    }
-//</editor-fold>//GEN-END:|47-getter|2|
-
-//<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand2 ">//GEN-BEGIN:|59-getter|0|59-preInit
-    /**
-     * Returns an initialized instance of exitCommand2 component.
-     *
-     * @return the initialized component instance
-     */
-    public Command getExitCommand2() {
-        if (exitCommand2 == null) {//GEN-END:|59-getter|0|59-preInit
-            // write pre-init user code here
-            exitCommand2 = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|59-getter|1|59-postInit
+            exitCommand1 = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|59-getter|1|59-postInit
             // write post-init user code here
         }//GEN-BEGIN:|59-getter|2|
-        return exitCommand2;
+        return exitCommand1;
     }
 //</editor-fold>//GEN-END:|59-getter|2|
 
-//<editor-fold defaultstate="collapsed" desc=" Generated Getter: showList ">//GEN-BEGIN:|55-getter|0|55-preInit
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: episodeList ">//GEN-BEGIN:|55-getter|0|55-preInit
     /**
-     * Returns an initialized instance of showList component.
+     * Returns an initialized instance of episodeList component.
      *
      * @return the initialized component instance
      */
-    public List getShowList() {
-        if (showList == null) {//GEN-END:|55-getter|0|55-preInit
+    public List getEpisodeList() {
+        if (episodeList == null) {//GEN-END:|55-getter|0|55-preInit
             // write pre-init user code here
-            showList = new List("Shows", Choice.IMPLICIT);//GEN-BEGIN:|55-getter|1|55-postInit
-            showList.addCommand(getExitCommand2());
-            showList.addCommand(getBackCommand());
-            showList.setCommandListener(this);
-            showList.setSelectedFlags(new boolean[]{});//GEN-END:|55-getter|1|55-postInit
+            episodeList = new List("Shows", Choice.IMPLICIT);//GEN-BEGIN:|55-getter|1|55-postInit
+            episodeList.addCommand(getBackCommand());
+            episodeList.addCommand(getExitCommand());
+            episodeList.setCommandListener(this);
+            episodeList.setSelectedFlags(new boolean[]{});//GEN-END:|55-getter|1|55-postInit
             SaxRssParser parser = new SaxRssParser();
-            if(FEEDSTATUS.equalsIgnoreCase("Youtube")){
-                parseAndDisplayFeed(parser,"http://www.youtube.com/rss/user/JupiterBroadcasting/videos.rss");
-            }else if(FEEDSTATUS.equalsIgnoreCase("MP3")){
-                RssHandler customhandler = new RssHandler("title", "feedburner:origEnclosureLink", 10);
+            String feedUrl = (String)showToFeedTable.get(FEEDSTATUS);
+            if(feedUrl.indexOf("youtube") != -1){
+                parseAndDisplayFeed(parser,feedUrl);
+            }else if(!FEEDSTATUS.equalsIgnoreCase("Coder Radio") && !FEEDSTATUS.equalsIgnoreCase("SciByte")){
+                RssHandler customhandler = new RssHandler("title", "enclosure", 15);
                 parser.setRssHadler(customhandler);
-                parseAndDisplayFeed(parser,"http://feeds.feedburner.com/JupiterBroadcasting");
+                parseAndDisplayFeed(parser,feedUrl);
             }
         }//GEN-BEGIN:|55-getter|2|
-        return showList;
+        return episodeList;
     }
 //</editor-fold>//GEN-END:|55-getter|2|
 
     private void parseAndDisplayFeed(SaxRssParser parser,String feed){
         rssTable = parser.parse(feed);
         for(int i =0;i < parser.getTitles().size();i++){
-            showList.append((String)parser.getTitles().elementAt(i), null);
+            episodeList.append((String)parser.getTitles().elementAt(i), null);
         }
     }
-//<editor-fold defaultstate="collapsed" desc=" Generated Method: showListAction ">//GEN-BEGIN:|55-action|0|55-preAction
+//<editor-fold defaultstate="collapsed" desc=" Generated Method: episodeListAction ">//GEN-BEGIN:|55-action|0|55-preAction
 
     /**
-     * Performs an action assigned to the selected list element in the showList
-     * component.
+     * Performs an action assigned to the selected list element in the
+     * episodeList component.
      */
-    public void showListAction() {//GEN-END:|55-action|0|55-preAction
+    public void episodeListAction() {//GEN-END:|55-action|0|55-preAction
         // enter pre-action user code here
-        String __selectedString = getShowList().getString(getShowList().getSelectedIndex());//GEN-LINE:|55-action|1|55-postAction
+        String __selectedString = getEpisodeList().getString(getEpisodeList().getSelectedIndex());//GEN-LINE:|55-action|1|55-postAction
         if(rssTable.containsKey(__selectedString)){
             try {
                 this.platformRequest((String)rssTable.get(__selectedString));
@@ -407,14 +439,103 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
             fileBrowser = new FileBrowser(getDisplay());//GEN-BEGIN:|76-getter|1|76-postInit
             fileBrowser.setTitle("File Browser");
             fileBrowser.setCommandListener(this);
-            fileBrowser.addCommand(FileBrowser.SELECT_FILE_COMMAND);
             fileBrowser.addCommand(getBackCommand());
-            fileBrowser.addCommand(getExitCommand1());//GEN-END:|76-getter|1|76-postInit
+            fileBrowser.addCommand(FileBrowser.SELECT_FILE_COMMAND);
+            fileBrowser.addCommand(getExitCommand());//GEN-END:|76-getter|1|76-postInit
             // write post-init user code here
         }//GEN-BEGIN:|76-getter|2|
         return fileBrowser;
     }
 //</editor-fold>//GEN-END:|76-getter|2|
+
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: showList ">//GEN-BEGIN:|91-getter|0|91-preInit
+    /**
+     * Returns an initialized instance of showList component.
+     *
+     * @return the initialized component instance
+     */
+    public List getShowList() {
+        if (showList == null) {//GEN-END:|91-getter|0|91-preInit
+            // write pre-init user code here
+            showList = new List("Shows", Choice.IMPLICIT);//GEN-BEGIN:|91-getter|1|91-postInit
+            showList.append("All Shows", null);
+            showList.append("Coder Radio", null);
+            showList.append("Faux Show", null);
+            showList.append("Linux Action Show", null);
+            showList.append("SciByte", null);
+            showList.append("Techsnap", null);
+            showList.append("Unfilter", null);
+            showList.addCommand(getBackCommand());
+            showList.addCommand(getExitCommand());
+            showList.setCommandListener(this);
+            showList.setSelectedFlags(new boolean[]{false, false, false, false, false, false, false});//GEN-END:|91-getter|1|91-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|91-getter|2|
+        return showList;
+    }
+//</editor-fold>//GEN-END:|91-getter|2|
+
+//<editor-fold defaultstate="collapsed" desc=" Generated Method: showListAction ">//GEN-BEGIN:|91-action|0|91-preAction
+    /**
+     * Performs an action assigned to the selected list element in the showList
+     * component.
+     */
+    public void showListAction() {//GEN-END:|91-action|0|91-preAction
+        FEEDSTATUS = getShowList().getString(getShowList().getSelectedIndex());
+        String __selectedString = getShowList().getString(getShowList().getSelectedIndex());//GEN-BEGIN:|91-action|1|99-preAction
+        if (__selectedString != null) {
+            if (__selectedString.equals("All Shows")) {//GEN-END:|91-action|1|99-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getEpisodeList());//GEN-LINE:|91-action|2|99-postAction
+                // write post-action user code here
+            } else if (__selectedString.equals("Coder Radio")) {//GEN-LINE:|91-action|3|95-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getEpisodeList());//GEN-LINE:|91-action|4|95-postAction
+                // write post-action user code here
+            } else if (__selectedString.equals("Faux Show")) {//GEN-LINE:|91-action|5|97-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getEpisodeList());//GEN-LINE:|91-action|6|97-postAction
+                // write post-action user code here
+            } else if (__selectedString.equals("Linux Action Show")) {//GEN-LINE:|91-action|7|94-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getEpisodeList());//GEN-LINE:|91-action|8|94-postAction
+                // write post-action user code here
+            } else if (__selectedString.equals("SciByte")) {//GEN-LINE:|91-action|9|100-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getEpisodeList());//GEN-LINE:|91-action|10|100-postAction
+                // write post-action user code here
+            } else if (__selectedString.equals("Techsnap")) {//GEN-LINE:|91-action|11|96-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getEpisodeList());//GEN-LINE:|91-action|12|96-postAction
+                // write post-action user code here
+            } else if (__selectedString.equals("Unfilter")) {//GEN-LINE:|91-action|13|98-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getEpisodeList());//GEN-LINE:|91-action|14|98-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|91-action|15|91-postAction
+        }//GEN-END:|91-action|15|91-postAction
+        // enter post-action user code here
+    }//GEN-BEGIN:|91-action|16|
+//</editor-fold>//GEN-END:|91-action|16|
+
+//<editor-fold defaultstate="collapsed" desc=" Generated Method: isYoutube ">//GEN-BEGIN:|112-if|0|112-preIf
+    /**
+     * Performs an action assigned to the isYoutube if-point.
+     */
+    public void isYoutube() {//GEN-END:|112-if|0|112-preIf
+        // enter pre-if user code here
+        if (FEEDSTATUS.equalsIgnoreCase("Youtube Feed")) {//GEN-LINE:|112-if|1|113-preAction
+            // write pre-action user code here
+            switchDisplayable(null, getList());//GEN-LINE:|112-if|2|113-postAction
+            // write post-action user code here
+        } else {//GEN-LINE:|112-if|3|114-preAction
+            // write pre-action user code here
+            switchDisplayable(null, getShowList());//GEN-LINE:|112-if|4|114-postAction
+            // write post-action user code here
+        }//GEN-LINE:|112-if|5|112-postIf
+        // enter post-if user code here
+    }//GEN-BEGIN:|112-if|6|
+//</editor-fold>//GEN-END:|112-if|6|
 
 
 

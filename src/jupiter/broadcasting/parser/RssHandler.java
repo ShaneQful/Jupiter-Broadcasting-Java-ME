@@ -18,7 +18,7 @@ public class RssHandler extends DefaultHandler{
     private boolean isLink = false;
     private boolean isTitle = false;
     private boolean ifInsideItem = false;
-    
+    private boolean enclosure = false;
     /**
      * Constructor
      */
@@ -38,15 +38,19 @@ public class RssHandler extends DefaultHandler{
     public RssHandler(String title,String link,int numberOfRecords) {
         titleString = title;
         linkString = link;
+        enclosure = link.equalsIgnoreCase("enclosure");
         rssTitles = new Vector();
         rssLinks = new Vector();
         maxRecords = numberOfRecords;
     }
            
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-    		if(ifInsideItem){
-            isLink = qName.equalsIgnoreCase(linkString);
+        if(ifInsideItem){
+            isLink = qName.equalsIgnoreCase(linkString) && !enclosure;
             isTitle = qName.equalsIgnoreCase(titleString);
+            if(enclosure && qName.equalsIgnoreCase("enclosure")){
+                rssLinks.addElement(attributes.getValue("url"));
+            }
         }else{
             ifInsideItem = qName.equalsIgnoreCase("item");
         }
