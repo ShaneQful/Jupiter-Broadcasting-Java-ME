@@ -12,9 +12,15 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
+/*
+ *  Copyright (c) 2012 Shane Quigley
+ *
+ *  This software is MIT licensed see link for details
+ *  http://www.opensource.org/licenses/MIT
+ */
 /**
  *
- * @author shane
+ * @author Shane Quigley
  */
 public class SaxRssParser {
     private SAXParserFactory factory;

@@ -37,3 +37,10 @@ To install get both the jad and jar files from the dist folder onto your phone a
 * [Use standard java style guide](http://www.oracle.com/technetwork/java/codeconv-138413.html)
 
 * If you have a patch and it makes sense. I'll take it but please justify your patches.
+
+### License
+
+* This software is MIT licensed see link for details
+
+* http://www.opensource.org/licenses/MIT
+

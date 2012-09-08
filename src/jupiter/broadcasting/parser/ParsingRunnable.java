@@ -6,9 +6,13 @@ package jupiter.broadcasting.parser;
 
 import jupiter.broadcasting.JupiterMIDlet;
 
-/**
+/*
+ * Copyright (c) 2012 Shane Quigley
  *
- * @author shane
+ * This software is MIT licensed see link for details
+ * http://www.opensource.org/licenses/MIT
+ * 
+ * @author Shane Quigley
  */
 public class ParsingRunnable implements Runnable{
     private JupiterMIDlet toModify;

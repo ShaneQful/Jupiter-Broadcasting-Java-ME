@@ -4,9 +4,13 @@ import java.util.Hashtable;
 import java.util.Vector;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
-/**
+/*
+ * Copyright (c) 2012 Shane Quigley
  *
- * @author shane
+ * This software is MIT licensed see link for details
+ * http://www.opensource.org/licenses/MIT
+ * 
+ * @author Shane Quigley
  */
 public class RssHandler extends DefaultHandler{
     private Vector rssTitles;

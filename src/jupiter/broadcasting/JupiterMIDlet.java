@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package jupiter.broadcasting;
 
 import java.io.IOException;
@@ -23,8 +19,13 @@ import jupiter.broadcasting.parser.SaxRssParser;
 import org.netbeans.microedition.lcdui.SplashScreen;
 import org.netbeans.microedition.lcdui.pda.FileBrowser;
 
-/**
- * @author shane
+/*
+ * Copyright (c) 2012 Shane Quigley
+ *
+ * This software is MIT licensed see link for details
+ * http://www.opensource.org/licenses/MIT
+ * 
+ * @author Shane Quigley
  */
 public class JupiterMIDlet extends MIDlet implements CommandListener {
     
