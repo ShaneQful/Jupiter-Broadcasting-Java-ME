@@ -22,18 +22,18 @@
                     <Property name="condition" typeID="P#javacode" value="VFEEDSTATUS.equalsIgnoreCase(&quot;Youtube Feed&quot;)"/>
                     <Property name="true" typeID="C#IfTrueEventSource" value="R113"/>
                     <Property name="false" typeID="C#IfFalseEventSource" value="R114"/>
-                    <Component componentID="113" typeID="C#IfTrueEventSource">
-                        <Property name="eventHandler" typeID="C#EventHandler" value="R116"/>
-                        <Component componentID="116" typeID="C#SwitchDisplayableEventHandler">
-                            <Property name="eventSource" typeID="C#EventSource" value="R113"/>
-                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R38"/>
-                        </Component>
-                    </Component>
                     <Component componentID="114" typeID="C#IfFalseEventSource">
                         <Property name="eventHandler" typeID="C#EventHandler" value="R117"/>
                         <Component componentID="117" typeID="C#SwitchDisplayableEventHandler">
                             <Property name="eventSource" typeID="C#EventSource" value="R114"/>
                             <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R91"/>
+                        </Component>
+                    </Component>
+                    <Component componentID="113" typeID="C#IfTrueEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R116"/>
+                        <Component componentID="116" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R113"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R38"/>
                         </Component>
                     </Component>
                 </Component>
@@ -222,12 +222,12 @@
                     <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
                     <Property name="elements" typeID="1C#ListElementEventSource" value="A7:3_R993_R953_R973_R944_R1003_R963_R98"/>
                     <Property name="selectCommand" typeID="C#CommandEventSource" value="R92"/>
-                    <Component componentID="100" typeID="C#ListElementEventSource">
-                        <Property name="eventHandler" typeID="C#EventHandler" value="R105"/>
-                        <Property name="string" typeID="Pjava.lang.String" value="VSciByte"/>
-                        <Component componentID="105" typeID="C#SwitchDisplayableEventHandler">
-                            <Property name="eventSource" typeID="C#EventSource" value="R100"/>
-                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R55"/>
+                    <Component componentID="92" typeID="C#ListSelectCommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R93"/>
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R91"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R39"/>
+                        <Component componentID="93" typeID="C#ListEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R92"/>
                         </Component>
                     </Component>
                     <Component componentID="95" typeID="C#ListElementEventSource">
@@ -238,36 +238,19 @@
                             <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R55"/>
                         </Component>
                     </Component>
-                    <Component componentID="108" typeID="C#CommandEventSource">
-                        <Property name="eventHandler" typeID="C#EventHandler" value="R119"/>
-                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R91"/>
-                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R64"/>
-                        <Component componentID="119" typeID="C#SwitchDisplayableEventHandler">
-                            <Property name="eventSource" typeID="C#EventSource" value="R108"/>
-                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R38"/>
-                        </Component>
-                    </Component>
-                    <Component componentID="96" typeID="C#ListElementEventSource">
-                        <Property name="eventHandler" typeID="C#EventHandler" value="R106"/>
-                        <Property name="string" typeID="Pjava.lang.String" value="VTechsnap"/>
-                        <Component componentID="106" typeID="C#SwitchDisplayableEventHandler">
-                            <Property name="eventSource" typeID="C#EventSource" value="R96"/>
-                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R55"/>
-                        </Component>
-                    </Component>
-                    <Component componentID="92" typeID="C#ListSelectCommandEventSource">
-                        <Property name="eventHandler" typeID="C#EventHandler" value="R93"/>
-                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R91"/>
-                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R39"/>
-                        <Component componentID="93" typeID="C#ListEventHandler">
-                            <Property name="eventSource" typeID="C#EventSource" value="R92"/>
-                        </Component>
-                    </Component>
                     <Component componentID="94" typeID="C#ListElementEventSource">
                         <Property name="eventHandler" typeID="C#EventHandler" value="R104"/>
                         <Property name="string" typeID="Pjava.lang.String" value="VLinux Action Show"/>
                         <Component componentID="104" typeID="C#SwitchDisplayableEventHandler">
                             <Property name="eventSource" typeID="C#EventSource" value="R94"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R55"/>
+                        </Component>
+                    </Component>
+                    <Component componentID="100" typeID="C#ListElementEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R105"/>
+                        <Property name="string" typeID="Pjava.lang.String" value="VSciByte"/>
+                        <Component componentID="105" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R100"/>
                             <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R55"/>
                         </Component>
                     </Component>
@@ -284,6 +267,14 @@
                         <Property name="string" typeID="Pjava.lang.String" value="VAll Shows"/>
                         <Component componentID="101" typeID="C#SwitchDisplayableEventHandler">
                             <Property name="eventSource" typeID="C#EventSource" value="R99"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R55"/>
+                        </Component>
+                    </Component>
+                    <Component componentID="96" typeID="C#ListElementEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R106"/>
+                        <Property name="string" typeID="Pjava.lang.String" value="VTechsnap"/>
+                        <Component componentID="106" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R96"/>
                             <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R55"/>
                         </Component>
                     </Component>
@@ -304,6 +295,15 @@
                             <Property name="mobileDevice" typeID="C#MobileDevice" value="R2"/>
                         </Component>
                     </Component>
+                    <Component componentID="108" typeID="C#CommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R119"/>
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R91"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R64"/>
+                        <Component componentID="119" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R108"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R38"/>
+                        </Component>
+                    </Component>
                 </Component>
             </Component>
             <Component componentID="13" typeID="C#ResourcesCategory">
@@ -317,12 +317,12 @@
         </Component>
     </Document>
     <FlowScene version="1">
-        <Node componentID="22" descriptorID="componentNode22" x="190" y="256"/>
-        <Node componentID="91" descriptorID="componentNode91" x="411" y="15"/>
-        <Node componentID="55" descriptorID="componentNode55" x="711" y="-1"/>
-        <Node componentID="38" descriptorID="componentNode38" x="210" y="38"/>
         <Node componentID="112" descriptorID="componentNode112" x="468" y="-122"/>
-        <Node componentID="76" descriptorID="componentNode76" x="771" y="245"/>
+        <Node componentID="55" descriptorID="componentNode55" x="711" y="-1"/>
+        <Node componentID="22" descriptorID="componentNode22" x="190" y="256"/>
         <Node componentID="2" descriptorID="componentNode2" x="550" y="292"/>
+        <Node componentID="91" descriptorID="componentNode91" x="411" y="15"/>
+        <Node componentID="76" descriptorID="componentNode76" x="771" y="245"/>
+        <Node componentID="38" descriptorID="componentNode38" x="210" y="38"/>
     </FlowScene>
 </VisualDesign>

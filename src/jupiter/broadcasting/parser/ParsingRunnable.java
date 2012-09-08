@@ -10,17 +10,18 @@ import jupiter.broadcasting.JupiterMIDlet;
  *
  * @author shane
  */
-public class ParsingThread extends Thread{
+public class ParsingRunnable implements Runnable{
     private JupiterMIDlet toModify;
     private SaxRssParser parser;
     private String feed;
-    public ParsingThread(JupiterMIDlet t,SaxRssParser p,String f) {
+    public ParsingRunnable(JupiterMIDlet t,SaxRssParser p,String f) {
         toModify = t;
         parser = p;
         feed = f;        
     }
     
-    public void parse(){
+    public void run() {
         toModify.parseAndDisplayFeed(parser, feed);
     }
+    
 }

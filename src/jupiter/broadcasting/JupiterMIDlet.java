@@ -17,7 +17,7 @@ import javax.microedition.media.Manager;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
 import javax.microedition.media.PlayerListener;
-import jupiter.broadcasting.parser.ParsingThread;
+import jupiter.broadcasting.parser.ParsingRunnable;
 import jupiter.broadcasting.parser.RssHandler;
 import jupiter.broadcasting.parser.SaxRssParser;
 import org.netbeans.microedition.lcdui.SplashScreen;
@@ -358,20 +358,14 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
             SaxRssParser parser = new SaxRssParser();
             String feedUrl = (String)showToFeedTable.get(FEEDSTATUS);
             if(feedUrl.indexOf("youtube") != -1){
-                ParsingThread t = new ParsingThread(this, parser, feedUrl){
-                    public void run(){
-                        ((ParsingThread)Thread.currentThread()).parse();
-                    }
-                };
+                Runnable runable = new ParsingRunnable(this, parser, feedUrl);
+                Thread t = new Thread(runable);
                 t.start();
             }else{
                 RssHandler customhandler = new RssHandler("title", "enclosure", 15);
                 parser.setRssHadler(customhandler);
-                ParsingThread t = new ParsingThread(this, parser, feedUrl){
-                    public void run(){
-                        ((ParsingThread)Thread.currentThread()).parse();
-                    }
-                };
+                Runnable runable = new ParsingRunnable(this, parser, feedUrl);
+                Thread t = new Thread(runable);
                 t.start();
             }
         }//GEN-BEGIN:|55-getter|2|
