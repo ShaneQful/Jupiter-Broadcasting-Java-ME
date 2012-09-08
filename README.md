@@ -8,7 +8,13 @@ Also think this is the first JB app for symbian.
 
 If anyone wants to read about its development of get any of my other apps got to http://www.softwareontheside.info
 
-To install get both the jad and jar files from the dist folder onto your phone and open the jad file
+### Installation
+
+* To install grab the jar from the dist folder
+
+* Put it on your phone
+
+* Open it on your phone
 
 ### Fetures:
 
