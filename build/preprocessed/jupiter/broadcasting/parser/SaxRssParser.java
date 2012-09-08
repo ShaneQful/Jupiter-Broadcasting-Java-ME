@@ -41,7 +41,7 @@ public class SaxRssParser {
             networkStream = (StreamConnection) Connector.open(rssfeed);        
             inputStream = networkStream.openInputStream();
             InputSource feedSource = new InputSource(inputStream);
-            saxParser.parse(feedSource, (DefaultHandler) handler);
+            saxParser.parse(feedSource, handler);
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (SAXException ex){

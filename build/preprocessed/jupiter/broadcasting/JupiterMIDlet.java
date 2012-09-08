@@ -35,8 +35,6 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
     String FEEDSTATUS = "Youtube Feed";
 //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
     private Command exitCommand;
-    private Command exitCommand1;
-    private Command stopCommand;
     private Command backCommand;
     private SplashScreen splashScreen;
     private List list;
@@ -261,7 +259,7 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
             // write pre-init user code here
             list = new List("Jupiter Broadcasting", Choice.IMPLICIT);//GEN-BEGIN:|38-getter|1|38-postInit
             list.append("Youtube Feed", null);
-            list.append("Mp3 Feed", null);
+            list.append("Mp3 Feeds", null);
             list.append("Donate", null);
             list.addCommand(getExitCommand());
             list.setCommandListener(this);
@@ -286,7 +284,7 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
                 FEEDSTATUS = __selectedString;
                 switchDisplayable(null, getEpisodeList());//GEN-LINE:|38-action|2|43-postAction
                 // write post-action user code here
-            } else if (__selectedString.equals("Mp3 Feed")) {//GEN-LINE:|38-action|3|71-preAction
+            } else if (__selectedString.equals("Mp3 Feeds")) {//GEN-LINE:|38-action|3|71-preAction
                 // write pre-action user code here
                 switchDisplayable(null, getShowList());//GEN-LINE:|38-action|4|71-postAction
                 // write post-action user code here
@@ -325,21 +323,7 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
     }
 //</editor-fold>//GEN-END:|47-getter|2|
 
-//<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand1 ">//GEN-BEGIN:|59-getter|0|59-preInit
-    /**
-     * Returns an initialized instance of exitCommand1 component.
-     *
-     * @return the initialized component instance
-     */
-    public Command getExitCommand1() {
-        if (exitCommand1 == null) {//GEN-END:|59-getter|0|59-preInit
-            // write pre-init user code here
-            exitCommand1 = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|59-getter|1|59-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|59-getter|2|
-        return exitCommand1;
-    }
-//</editor-fold>//GEN-END:|59-getter|2|
+
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Getter: episodeList ">//GEN-BEGIN:|55-getter|0|55-preInit
     /**
@@ -357,24 +341,26 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
             episodeList.setSelectedFlags(new boolean[]{});//GEN-END:|55-getter|1|55-postInit
             SaxRssParser parser = new SaxRssParser();
             String feedUrl = (String)showToFeedTable.get(FEEDSTATUS);
-            if(feedUrl.indexOf("youtube") != -1){
-                Runnable runable = new ParsingRunnable(this, parser, feedUrl);
-                Thread t = new Thread(runable);
-                t.start();
-            }else{
-                RssHandler customhandler = new RssHandler("title", "enclosure", 15);
-                parser.setRssHadler(customhandler);
-                Runnable runable = new ParsingRunnable(this, parser, feedUrl);
-                Thread t = new Thread(runable);
-                t.start();
+            RssHandler customhandler = new RssHandler("title", "enclosure", 15);
+            if(FEEDSTATUS.equalsIgnoreCase("Youtube Feed")){
+                System.out.println("@@@@@@@@@@@@@@ Youtuebe feed called ");
+                customhandler = new RssHandler();
             }
+            System.out.println(FEEDSTATUS);
+            System.out.println(feedUrl);            
+            parser.setRssHadler(customhandler);
+            Runnable runable = new ParsingRunnable(this, parser, feedUrl);
+            Thread t = new Thread(runable);
+            t.start();
         }//GEN-BEGIN:|55-getter|2|
         return episodeList;
     }
 //</editor-fold>//GEN-END:|55-getter|2|
 
     public void parseAndDisplayFeed(SaxRssParser parser,String feed){
+        episodeList.append("Loading ...", null);
         rssTable = parser.parse(feed);
+        episodeList.delete(0);
         for(int i =0;i < parser.getTitles().size();i++){
             episodeList.append((String)parser.getTitles().elementAt(i), null);
         }
@@ -416,21 +402,7 @@ public class JupiterMIDlet extends MIDlet implements CommandListener {
 
 
 
-//<editor-fold defaultstate="collapsed" desc=" Generated Getter: stopCommand ">//GEN-BEGIN:|70-getter|0|70-preInit
-    /**
-     * Returns an initialized instance of stopCommand component.
-     *
-     * @return the initialized component instance
-     */
-    public Command getStopCommand() {
-        if (stopCommand == null) {//GEN-END:|70-getter|0|70-preInit
-            // write pre-init user code here
-            stopCommand = new Command("Stop", Command.STOP, 0);//GEN-LINE:|70-getter|1|70-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|70-getter|2|
-        return stopCommand;
-    }
-//</editor-fold>//GEN-END:|70-getter|2|
+
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Getter: fileBrowser ">//GEN-BEGIN:|76-getter|0|76-preInit
     /**
